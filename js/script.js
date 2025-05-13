@@ -7,9 +7,14 @@ const disbtn = (shwbtn) => {
     const parent = document.getElementById('btn-fes');
     for (const glass of shwbtn) {
         const crt = document.createElement('p');
-        crt.innerText = glass.category;
+        crt.innerHTML = `
+            <button class="btn" onclick = specificbtn(${glass.category_id})>${glass.category}</button
+        ` //specific button e click krtese
         parent.appendChild(crt);
-        crt.classList = 'btn'; // creating a button shape
+
+        // crt.innerText = glass.category;
+        // parent.appendChild(crt);
+        // crt.classList = 'btn'; // creating a button shape
     }
     // shwbtn.forEach(element => {
     //     const crt = document.createElement('p');
@@ -17,20 +22,27 @@ const disbtn = (shwbtn) => {
     //     parent.appendChild(crt);
     // });
 }
+function specificbtn(cid) {
+    //console.log(cid);
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${cid}`) //fetch kore cate_id ta nise
+        .then(response => response.json())
+        .then(data => disvds(data.category)) //j id nise setar category sob pathaise.
+}
 function passvds() {
     fetch('https://openapi.programming-hero.com/api/phero-tube/videos')
         .then(response => response.json())
         .then(data => disvds(data.videos))
 }
 const disvds = (vds) => {
-    console.log(vds);
+    //console.log(vds);
     const parentvds = document.getElementById('vds');
+    parentvds.innerHTML=" "; // parent er mddhei sob load data thake . age jgula chilo segua baad dise.
     for (const disvds of vds) {
         const crtvds = document.createElement('p');
         crtvds.innerHTML = `
             <figure class="relative">
                 <img class="md:h-50 md:w-80" src = ${disvds.thumbnail} alt="Shoes" />
-                ${disvds.others.posted_date?.length==0? "" : `<span class="absolute right-3 rounded bottom-2 text-white bg-black">${getime(disvds.others.posted_date)} ago </span>}`}
+                ${disvds.others.posted_date?.length == 0 ? "" : `<span class="absolute right-3 rounded bottom-2 text-white bg-black">${getime(disvds.others.posted_date)} ago </span>}`}
             </figure>
             <div class="card-body">
                 <div class="md:flex">
@@ -48,7 +60,6 @@ const disvds = (vds) => {
         `
         crtvds.classList = 'card';
         parentvds.appendChild(crtvds);
-        // creaing a button shape
     }
 }
 
